@@ -21,12 +21,18 @@ async function run() {
         await client.connect();
         const database = client.db('tour_plans');
         const ourServices = database.collection('services');
-
-        //GET services API
+        //GET API
         app.get('/services', async (req, res) => {
             const cursor = ourServices.find({});
             const services = await cursor.toArray();
             res.send(services);
+        })
+
+        //POST API
+        app.post('/services', async (req, res) => {
+            const newService = req.body;
+            const result = await ourServices.insertOne(newService)
+            res.json(result);
         })
     }
     finally {
